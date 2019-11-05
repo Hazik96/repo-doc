@@ -1,0 +1,34 @@
+---
+- name: turn off iptables and set selinux permissive
+  hosts: linoop
+  gather_facts: no
+
+  #1
+  tasks:
+    - name: turn off iptables and disable it
+      service:
+        name: iptables
+        state: stopped
+        enabled: no
+      register: iptState
+    - debug:
+        var: iptState
+
+  #2
+    - name: setting selinux permissive
+      selinux:
+        policy: targeted
+        state: permissive
+      register: seState
+  #3
+    - debug:
+        var: seState
+
+  #4
+    - name: check the status of iptables and selinux
+      script: /samba/playbook/checkIptablesAndSelinux.sh
+      register: scriptOutput
+
+  #5
+    - debug:
+        var: scriptOutput
