@@ -6,3 +6,16 @@
       yum:
         name: httpd
         state: latest
+    - name: createing index file
+      file:
+        dest: /var/www/html/index.html
+        state: touch
+    - name: adding content in the index.html file
+      blockinfile:
+        dest: /var/www/html/index.html
+        block: |
+          <h1>This is my WEBSITE<\h1>
+    - name: starting service httpd
+      service:
+        name: httpd
+        state: started
